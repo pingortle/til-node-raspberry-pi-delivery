@@ -1,13 +1,19 @@
 const micro = require('micro')
-const { promisify } = require('util')
-const { exec } = require('child_process')
-const promiseExec = promisify(exec)
+const hostname = require('./lib/hostname')
 
 const port = process.env.PORT || 3000
 
 const server = micro(async () => {
-  const host = (await promiseExec('hostname')).stdout.trim()
-  return `<html><head><meta charset="utf8"></head><body><p>wow! congrats! you're looking at your very own host, ${host}! 🎉</p></body></html>`
+  return `
+    <html>
+      <head><meta charset="utf8"></head>
+      <body>
+        <p>😮 wow!</p>
+        <p>👏 congrats!</p>
+        <p>🎉 you're looking at your very own server, <strong><code>${await hostname()}</code></strong>!</p>
+      </body>
+    </html>
+  `
 })
 
 server.listen(port)
