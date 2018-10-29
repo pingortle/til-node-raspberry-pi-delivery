@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist",
+    "pkg": "pkg package.json --out-path dist --targets node10-linux-armv7 --no-bytecode",
     "watch": "nodemon"
   },
   "author": "Kaleb Lape",
@@ -13,6 +15,7 @@
     "micro": "^9.3.3"
   },
   "devDependencies": {
-    "nodemon": "^1.18.5"
+    "nodemon": "^1.18.5",
+    "pkg": "^4.3.4"
   }
 }
