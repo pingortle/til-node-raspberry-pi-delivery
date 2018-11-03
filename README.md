@@ -6,7 +6,7 @@ See the [previous episode](//github.com/pingortle/til-dpkg) for a simple debian 
 
 ## Hacking
 
-- **macOS**: Run `brew bundle`
+- **macOS**: Run `brew bundle` *Hint: [install homebrew first](https://brew.sh)*
 - `npm install`
 - `npm run build`
 - `npm run debianize`
