@@ -2,7 +2,7 @@
 
 This is the next step in my journey toward raspberry pi node app delivery nirvana.
 
-See the [previous episode](pingortle/til-dpkg) for a simple debian package example.
+See the [previous episode](//github.com/pingortle/til-dpkg) for a simple debian package example.
 
 ## Hacking
 
