@@ -1,0 +1,11 @@
+[Unit]
+Description=Simple Service
+
+[Service]
+User=pi
+ExecStart=/usr/bin/simple-node-rpi-service
+Type=simple
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

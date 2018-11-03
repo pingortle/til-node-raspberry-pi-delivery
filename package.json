@@ -6,7 +6,8 @@
   "bin": "index.js",
   "scripts": {
     "clean": "rm -rf dist",
-    "pkg": "pkg package.json --out-path dist --targets node10-linux-armv7 --no-bytecode",
+    "build": "pkg package.json --out-path dist --targets node10-linux-armv7 --no-bytecode",
+    "debianize": "mkdir -p deb/usr/bin && cp dist/simple-node-rpi-service deb/usr/bin && dpkg --build deb dist",
     "watch": "nodemon"
   },
   "author": "Kaleb Lape",
