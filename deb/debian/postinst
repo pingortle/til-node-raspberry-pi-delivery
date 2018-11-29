@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-service simple-node-rpi-service restart ||
-  service simple-node-rpi-service enable

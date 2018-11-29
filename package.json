@@ -1,13 +1,15 @@
 {
   "name": "simple-node-rpi-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple Service",
   "main": "index.js",
   "bin": "index.js",
   "scripts": {
+    "build": "scripty",
+    "build:binary": "scripty",
+    "build:debian": "scripty",
+    "build:debian:template": "scripty",
     "clean": "rm -rf dist",
-    "build": "pkg package.json --out-path dist --targets node10-linux-armv7 --no-bytecode",
-    "debianize": "mkdir -p deb/usr/bin && cp dist/simple-node-rpi-service deb/usr/bin && dpkg --build deb dist",
     "watch": "nodemon"
   },
   "author": "Kaleb Lape",
@@ -16,7 +18,10 @@
     "micro": "^9.3.3"
   },
   "devDependencies": {
+    "glob": "^7.1.3",
+    "mustache": "^3.0.1",
     "nodemon": "^1.18.5",
-    "pkg": "^4.3.4"
+    "pkg": "^4.3.4",
+    "scripty": "^1.8.0"
   }
 }

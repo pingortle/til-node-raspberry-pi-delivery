@@ -1,9 +1,9 @@
 [Unit]
-Description=Simple Service
+Description={{description}}
 
 [Service]
-User=pi
-ExecStart=/usr/bin/simple-node-rpi-service
+User={{name}}
+ExecStart=/usr/bin/{{name}}
 Type=simple
 Restart=always
 

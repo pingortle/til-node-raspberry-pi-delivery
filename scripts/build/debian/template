@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+const glob = require('glob')
+const mkdirp = require('mkdirp')
+const Mustache = require('mustache')
+const path = require('path')
+
+const settings = JSON.parse(fs.readFileSync('package.json'))
+
+const templateRootDir = process.argv[2] || 'templates'
+const destination = process.argv[3] || 'dist/deb'
+compileTemplateDirectory(templateRootDir, destination, settings)
+
+function compileTemplateDirectory (templateRootDir, destination, settings) {
+  for (let templatePath of glob.sync(`${templateRootDir}/**/*.mustache`)) {
+    compileTemplate(templatePath, templateRootDir, destination, settings)
+  }
+}
+
+function compileTemplate (templatePath, templateRootDir, destination, settings) {
+  const renderedTemplate = render(templatePath)
+  const executable = templatePath.match(/\+x\.mustache$/)
+  const mode = executable ? 0o777 : 0o666
+  const file = Mustache.render(
+    templatePath.replace(/(\+x)?\.mustache$/, '').replace(new RegExp(`^${templateRootDir}/?`), ''),
+    settings,
+    {},
+    ['__.', '.__']
+  )
+
+  writeFile(`${destination}/${file}`, renderedTemplate, { mode })
+}
+
+function render (templatePath) {
+  const template = fs.readFileSync(templatePath, { encoding: 'utf8' })
+  return Mustache.render(template, settings)
+}
+
+function writeFile (filename, contents, options) {
+  mkdirp.sync(path.dirname(filename))
+  fs.writeFileSync(filename, contents, options)
+}

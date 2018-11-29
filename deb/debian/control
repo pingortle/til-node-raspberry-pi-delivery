@@ -1,7 +1,0 @@
-Package: simple-node-service
-Architecture: armhf
-Maintainer: @pingortle
-Priority: extra
-Version: 0.0.0
-Description: This package installs a simple web server listening at port 3000.
-

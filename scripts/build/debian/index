@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -e
+
+npm run build:debian:template
+mkdir -p dist/deb/usr/bin
+cp dist/$npm_package_name dist/deb/usr/bin
+dpkg --build dist/deb dist

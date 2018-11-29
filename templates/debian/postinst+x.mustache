@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+adduser --system \
+  --quiet \
+  --disabled-login \
+  --no-create-home \
+  {{name}}
+systemctl daemon-reload
+systemctl enable {{name}}.service
+service {{name}} restart || service {{name}} start
