@@ -22,13 +22,7 @@ function compileTemplate (templatePath, templateRootDir, destination, settings) 
   const renderedTemplate = render(templatePath)
   const executable = templatePath.match(/\+x\.mustache$/)
   const mode = executable ? 0o777 : 0o666
-  const file = Mustache.render(
-    templatePath.replace(/(\+x)?\.mustache$/, '').replace(new RegExp(`^${templateRootDir}/?`), ''),
-    settings,
-    {},
-    ['__.', '.__']
-  )
-
+  const file = renderPath(cleanPath(templatePath))
   writeFile(`${destination}/${file}`, renderedTemplate, { mode })
 }
 
@@ -37,7 +31,27 @@ function render (templatePath) {
   return Mustache.render(template, settings)
 }
 
+function cleanPath (path) {
+  return path.replace(/(\+x)?\.mustache$/, '').replace(new RegExp(`^${templateRootDir}/?`), '')
+}
+
+function renderPath (path) {
+  return Mustache.render(
+    path,
+    settings,
+    {},
+    ['__.', '.__']
+  )
+}
+
 function writeFile (filename, contents, options) {
-  mkdirp.sync(path.dirname(filename))
-  fs.writeFileSync(filename, contents, options)
+  mkdirp(path.dirname(filename), (error) => {
+    if (error) {
+      throw error
+    } else {
+      fs.writeFile(filename, contents, options, (error) => {
+        if (error) throw error
+      })
+    }
+  })
 }
