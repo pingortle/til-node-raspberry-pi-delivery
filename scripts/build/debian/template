@@ -1,57 +1,22 @@
 #!/usr/bin/env node
 
+const copy = require('copy-template-dir')
 const fs = require('fs')
 const glob = require('glob')
-const mkdirp = require('mkdirp')
-const Mustache = require('mustache')
 const path = require('path')
 
 const settings = JSON.parse(fs.readFileSync('package.json'))
 
-const templateRootDir = process.argv[2] || 'templates'
-const destination = process.argv[3] || 'dist/deb'
-compileTemplateDirectory(templateRootDir, destination, settings)
+const templateRootDir = path.join(process.cwd(), process.argv[2] || 'templates')
+const destination = path.join(process.cwd(), process.argv[3] || 'dist/deb')
 
-function compileTemplateDirectory (templateRootDir, destination, settings) {
-  for (let templatePath of glob.sync(`${templateRootDir}/**/*.mustache`)) {
-    compileTemplate(templatePath, templateRootDir, destination, settings)
-  }
-}
+copy(templateRootDir, destination, settings, (error, files) => {
+  if (error) throw error
 
-function compileTemplate (templatePath, templateRootDir, destination, settings) {
-  const renderedTemplate = render(templatePath)
-  const executable = templatePath.match(/\+x\.mustache$/)
-  const mode = executable ? 0o777 : 0o666
-  const file = renderPath(cleanPath(templatePath))
-  writeFile(`${destination}/${file}`, renderedTemplate, { mode })
-}
+  glob(path.join(destination, 'debian/{pre,post}{inst,rm}'), (error, files) => {
+    if (error) throw error
 
-function render (templatePath) {
-  const template = fs.readFileSync(templatePath, { encoding: 'utf8' })
-  return Mustache.render(template, settings)
-}
-
-function cleanPath (path) {
-  return path.replace(/(\+x)?\.mustache$/, '').replace(new RegExp(`^${templateRootDir}/?`), '')
-}
-
-function renderPath (path) {
-  return Mustache.render(
-    path,
-    settings,
-    {},
-    ['__.', '.__']
-  )
-}
-
-function writeFile (filename, contents, options) {
-  mkdirp(path.dirname(filename), (error) => {
-    if (error) {
-      throw error
-    } else {
-      fs.writeFile(filename, contents, options, (error) => {
-        if (error) throw error
-      })
-    }
+    const mode = 0o775
+    files.forEach(file => fs.chmod(file, mode, (error) => { if (error) throw error }))
   })
-}
+})
